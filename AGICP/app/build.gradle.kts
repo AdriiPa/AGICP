@@ -68,4 +68,20 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(platform(libs.firebase.bom))
+
+    implementation(libs.play.services.basement)
+
+    implementation(libs.firebase.auth)
+    //Google Sign-In
+    implementation(libs.play.services.auth)
+
+    //    // Kotlin extensions and coroutines support for Jetpack Compose
+    implementation(libs.androidx.activity.compose.v180)
+
+    //Jetpack Compose
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.firebase.database)
+
+
 }
