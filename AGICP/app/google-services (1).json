@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "290607819203",
+    "firebase_url": "https://agicp-1fb5f-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "agicp-1fb5f",
+    "storage_bucket": "agicp-1fb5f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290607819203:android:020020dbfe9156f8c1b576",
+        "android_client_info": {
+          "package_name": "com.example.agicp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "290607819203-l3q9jdqdnoninbmh4p9a9gkcdg2e2fnu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.agicp",
+            "certificate_hash": "4571a9901d506a606933cbf4a0730a45da00bbad"
+          }
+        },
+        {
+          "client_id": "290607819203-mqlgsup876f6mb2qdoidist9mbue6kjt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg24WN-cCidYxGo02cABntVEem4k0NYf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "290607819203-mqlgsup876f6mb2qdoidist9mbue6kjt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
