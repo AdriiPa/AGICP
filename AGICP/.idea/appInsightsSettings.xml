@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.agicp" />
+                  <option name="mobileSdkAppId" value="1:290607819203:android:020020dbfe9156f8c1b576" />
+                  <option name="projectId" value="agicp-1fb5f" />
+                  <option name="projectNumber" value="290607819203" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

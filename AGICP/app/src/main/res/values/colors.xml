@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Colores principales AGICP -->
+    <color name="verde_padel">#39e600</color>
+    <color name="azul_deporte">#0091EA</color>
+    <color name="naranja_vivo">#FF9800</color>
+    <color name="gris_claro">#F2F2F2</color>
+    <color name="negro">#111111</color>
+    <color name="blanco">#FFFFFF</color>
 </resources>
