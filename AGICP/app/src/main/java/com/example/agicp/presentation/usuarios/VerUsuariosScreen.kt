@@ -1,6 +1,7 @@
 package com.example.agicp.presentation.usuarios
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,52 +13,57 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.agicp.data.model.Usuario
+import com.example.agicp.presentation.admin.BottomNavigationBarAdminAGICP
 import com.example.agicp.viewmodel.AuthViewModel
 import com.example.agicp.viewmodel.UsuarioViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerUsuariosScreen(
-    navController: NavController,
+    navController: NavHostController,
     usuarioViewModel: UsuarioViewModel,
     authViewModel: AuthViewModel
 ) {
+    LaunchedEffect(Unit) {
+        usuarioViewModel.cargarTodosLosUsuarios()
+    }
+
     val usuariosList by usuarioViewModel.listaUsuarios.collectAsState(initial = emptyList())
     val currentUserId = authViewModel.getCurrentUserId()
-
-    // Filtrar el usuario actual para no mostrarlo en la lista
     val filteredUsuarios = usuariosList.filter { it.id != currentUserId }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                text = "Usuarios Registrados",
-                style = MaterialTheme.typography.headlineSmall,
-                color = Color.Black
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Usuarios Registrados", color = Color.White) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF003366))
             )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LazyColumn {
+        },
+        bottomBar = { BottomNavigationBarAdminAGICP(navController,) },
+        containerColor = Color(0xFFFF9800)
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(16.dp)
+            ) {
                 items(filteredUsuarios) { usuario ->
                     UserCard(
                         usuario = usuario,
-                        onActivate = {
-                            usuarioViewModel.activarUsuario(usuario.id)
-                        },
-                        onDelete = {
-                            usuarioViewModel.eliminarUsuario(usuario.id)
-                        }
+                        onActivate = { usuarioViewModel.activarUsuario(usuario.id) },
+                        onDelete = { usuarioViewModel.eliminarUsuario(usuario.id) }
                     )
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun UserCard(
@@ -66,6 +72,8 @@ fun UserCard(
     onDelete: () -> Unit
 ) {
     val context = LocalContext.current
+    var isActive by remember { mutableStateOf(usuario.activo) }
+
 
     Card(
         modifier = Modifier
@@ -98,13 +106,18 @@ fun UserCard(
                 Button(
                     onClick = {
                         onActivate()
+                        // Cambia el estado local instantáneamente
+                        isActive = !isActive
                         Toast
-                            .makeText(context, "Usuario ${usuario.nombre} activado", Toast.LENGTH_SHORT)
+                            .makeText(context,
+                                "Usuario ${usuario.nombre} ${if (isActive) "activado" else "desactivado"}",
+                                Toast.LENGTH_SHORT
+                            )
                             .show()
                     },
                     modifier = Modifier.padding(end = 8.dp)
                 ) {
-                    Text("Activar")
+                    Text(if (isActive) "Desactivar" else "Activar")
                 }
                 Button(
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red),

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.agicp.R
 import com.example.agicp.data.model.Usuario
 import com.example.agicp.core.navigation.Rutas
@@ -227,12 +228,13 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signOut(
-        context: Context, navController: NavController, usuarioViewModel: UsuarioViewModel
+        context: Context, navController: NavHostController, usuarioViewModel: UsuarioViewModel
     ) {
         auth.signOut()
         usuarioViewModel.cerrarSesion()
         navController.navigate(Rutas.LOGIN) {
-            popUpTo(Rutas.LOGIN) { inclusive = true }
+            popUpTo(0)
+            launchSingleTop = true
         }
     }
 

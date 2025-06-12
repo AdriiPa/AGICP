@@ -4,40 +4,57 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.key
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.agicp.presentation.login.LoginScreen
-import com.example.agicp.presentation.registro.RegistroScreen
-import com.example.agicp.viewmodel.AuthViewModel
-import com.example.agicp.viewmodel.UsuarioViewModel
 import com.example.agicp.core.navigation.Rutas
 import com.example.agicp.core.theme.AGICPTheme
+import com.example.agicp.presentation.admin.AdminPartidosScreen
 import com.example.agicp.presentation.admin.AdminScreen
+import com.example.agicp.presentation.dashboard.DashboardScreen
+import com.example.agicp.presentation.login.LoginScreen
+import com.example.agicp.presentation.perfil.PerfilScreenAGICP
+import com.example.agicp.presentation.pistas.AdminPistasScreen
+import com.example.agicp.presentation.registro.RegistroScreen
+import com.example.agicp.presentation.reservas.ReservaPistaScreenAGICP
+import com.example.agicp.presentation.reservas.ReservasScreenAGICP
+import com.example.agicp.presentation.torneos.AdminTorneosScreen
+import com.example.agicp.presentation.usuarios.VerUsuariosScreen
+import com.example.agicp.viewmodel.*
+import com.example.agicp.viewmodel.partidosViewModel.PartidosViewModel
+import com.example.agicp.viewmodel.pistasViewModel.PistasViewModel
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge() // Asegura que la app ocupe toda la pantalla
+        enableEdgeToEdge()
 
         setContent {
             AGICPTheme {
-                // Inicializamos NavController para la navegación
                 val navController = rememberNavController()
 
-                // Usamos `viewModel()` para obtener los ViewModels
                 val authViewModel: AuthViewModel = viewModel()
                 val usuarioViewModel: UsuarioViewModel = viewModel()
+                val pistasViewModel: PistasViewModel = viewModel()
+                val torneosViewModel: TorneosViewModel = viewModel()
+                val partidosViewModel: PartidosViewModel = viewModel()
 
-                // Llamamos a la función que contiene las rutas
-                Navegacion(navController, authViewModel, usuarioViewModel)
+                Navegacion(
+                    navController,
+                    authViewModel,
+                    usuarioViewModel,
+                    partidosViewModel,
+                    pistasViewModel,
+                    torneosViewModel
+                )
+
+
             }
         }
     }
@@ -47,28 +64,51 @@ class MainActivity : ComponentActivity() {
 fun Navegacion(
     navController: NavHostController,
     authViewModel: AuthViewModel,
-    usuarioViewModel: UsuarioViewModel
+    usuarioViewModel: UsuarioViewModel,
+    partidosViewModel: PartidosViewModel,
+    pistasViewModel: PistasViewModel,
+    torneosViewModel: TorneosViewModel
 ) {
-    // Aquí definimos las rutas principales de la app
     NavHost(navController = navController, startDestination = Rutas.LOGIN) {
-        // Pantalla de Login
+
         composable(Rutas.LOGIN) {
             LoginScreen(navController, authViewModel, usuarioViewModel)
         }
 
-        // Pantalla de Registro
         composable(Rutas.REGISTRO) {
             RegistroScreen(navController, authViewModel)
         }
 
-        // Pantalla Dashboard (después de registro/login exitoso)
         composable(Rutas.DASHBOARD) {
-            //DashboardScreen(navController, usuarioViewModel)
+            DashboardScreen(navController,usuarioViewModel,authViewModel)
+        }
+        composable(Rutas.PERFIL){
+            PerfilScreenAGICP(navController,usuarioViewModel,partidosViewModel,authViewModel)
         }
 
-        // Pantalla Admin (solo accesible para admins)
-        composable(Rutas.ADMIN) {
-            AdminScreen(navController, usuarioViewModel, authViewModel,navController)
+        composable(Rutas.ADMIN_USUARIOS) {
+            VerUsuariosScreen(navController, usuarioViewModel, authViewModel)
         }
+        composable(Rutas.ADMIN_PISTAS) {
+            AdminPistasScreen(navController, pistasViewModel, partidosViewModel)
+        }
+        composable(Rutas.ADMIN_TORNEOS) {
+            AdminTorneosScreen(navController, torneosViewModel, pistasViewModel)
+        }
+        composable(Rutas.ADMIN_PARTIDOS) {
+            AdminPartidosScreen(navController, partidosViewModel, usuarioViewModel)
+        }
+        composable(Rutas.ADMIN) {
+            AdminScreen(navController, usuarioViewModel, authViewModel)
+        }
+        composable(Rutas.PISTAS) {
+            ReservasScreenAGICP(navController, usuarioViewModel, partidosViewModel)
+        }
+        composable(Rutas.RESERVAR) {
+            ReservaPistaScreenAGICP(navController, usuarioViewModel, pistasViewModel, partidosViewModel)
+        }
+
+
     }
 }
+

@@ -42,7 +42,8 @@ fun LoginScreen(
     usuarioViewModel: UsuarioViewModel
 ) {
     val context = LocalContext.current
-    val fondoLogin = painterResource(id = R.drawable.fondo_login) // Asegúrate de poner la imagen en drawable
+    val fondoLogin =
+        painterResource(id = R.drawable.fondo_login) // Asegúrate de poner la imagen en drawable
     // Colores AGICP
     val verdePadel = colorResource(id = R.color.verde_padel)
     val azulDeporte = Color(0xFF003366)
@@ -107,11 +108,13 @@ fun LoginScreen(
             val userRole = authViewModel.userRole.value
             if (userRole == "admin") {
                 navController.navigate(Rutas.ADMIN) {
-                    popUpTo(Rutas.LOGIN) { inclusive = true }
+                    popUpTo(0)
+                    launchSingleTop = true
                 }
             } else {
                 navController.navigate(Rutas.DASHBOARD) {
-                    popUpTo(Rutas.LOGIN) { inclusive = true }
+                    popUpTo(0)
+                    launchSingleTop = true
                 }
             }
         }
@@ -248,3 +251,4 @@ fun LoginScreen(
         }
     }
 }
+

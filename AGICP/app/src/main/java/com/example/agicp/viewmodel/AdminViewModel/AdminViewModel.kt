@@ -80,7 +80,7 @@ class AdminViewModel : ViewModel() {
 
     fun agregarPista(pista: Pista) {
         viewModelScope.launch {
-            pistaRepo.agregarPista(pista)
+            pistaRepo.crearPista(pista)
             cargarPistas()
         }
     }

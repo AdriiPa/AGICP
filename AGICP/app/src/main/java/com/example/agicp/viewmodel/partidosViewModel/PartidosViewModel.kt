@@ -64,4 +64,13 @@ class PartidosViewModel : ViewModel() {
             cargarPartidos()
         }
     }
+    fun getEstadisticasUsuario(userId: String): Triple<Int, Int, Int> {
+        val todos = listaPartidos.value
+        val jugados = todos.filter { it.participantes.containsKey(userId) }
+        val ganados = jugados.count { it.resultado?.contains("gana:$userId") == true }
+        val perdidos = jugados.count { it.resultado?.startsWith("gana:") == true && !it.resultado.contains(userId) }
+        return Triple(jugados.size, ganados, perdidos)
+    }
+
+
 }
