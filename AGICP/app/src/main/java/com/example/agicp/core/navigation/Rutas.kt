@@ -12,4 +12,5 @@ object Rutas {
     const val PISTAS = "pistas"
     const val AMIGOS = "amigos"
     const val NOTIFICACIONES = "notificaciones"
+    const val USUARIOS = "usuarios"
 }

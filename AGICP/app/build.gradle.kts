@@ -30,20 +30,24 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-        isCoreLibraryDesugaringEnabled = true
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         compose = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -61,8 +65,50 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.runtime.ktx)
+
+    // Firebase BOM - Asegura compatibilidad entre dependencias
+    implementation(platform(libs.firebase.bom.v3223))
+
+    // Firebase Authentication
+    implementation("com.google.firebase:firebase-auth-ktx:22.1.2")
+
+    // Firebase Database
+    implementation(libs.firebase.database.ktx.v2031) // Compatible con Kotlin 1.9.0
+
+    // Firebase Firestore
+    implementation(libs.firebase.firestore.ktx.v2491) // Compatible con Kotlin 1.9.0
+
+    // Firebase Analytics
+    implementation("com.google.firebase:firebase-analytics-ktx")
+
+    // Google Sign-In
+    implementation(libs.play.services.auth.v2070)
+
+    // Kotlin extensions y coroutines para Jetpack Compose
+    implementation(libs.androidx.activity.compose.v180)
+    implementation(libs.androidx.navigation.compose)
+
+    // Jetpack Compose Core
+    implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // Manejo de imágenes con Coil
+    implementation(libs.coil.compose)
+
+    // Google Maps y Ubicación
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.maps.android:maps-compose:2.11.2")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+
+
+    // Jetpack Lifecycle Runtime para KTX
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.firebase.storage.ktx)
+    implementation(libs.androidx.material3.android)
     implementation(libs.firebase.firestore.ktx)
-    implementation(libs.androidx.room.runtime.android)
+    implementation(libs.androidx.media3.common.ktx)
+
+    // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,24 +116,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(platform(libs.firebase.bom))
-
-    implementation(libs.play.services.basement)
-
-    implementation(libs.firebase.auth)
-    //Google Sign-In
-    implementation(libs.play.services.auth)
-
-    //    // Kotlin extensions and coroutines support for Jetpack Compose
-    implementation(libs.androidx.activity.compose.v180)
-
-    //Jetpack Compose
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.firebase.database)
-
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
-
-
-
 }

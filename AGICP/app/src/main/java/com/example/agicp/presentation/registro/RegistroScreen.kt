@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -24,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.agicp.R
 import com.example.agicp.viewmodel.AuthViewModel
-import com.example.agicp.core.navigation.Rutas
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,17 +66,17 @@ fun RegistroScreen(
     Box(
         Modifier
             .fillMaxSize()
-            .background(grisClaro),
+            .background(azulDeporte),
         contentAlignment = Alignment.Center
     ) {
         Column(
             Modifier
                 .fillMaxWidth()
-                .background(Color.White, RoundedCornerShape(24.dp))
+                .background(color = naranjaVivo, RoundedCornerShape(24.dp))
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Registro de Jugador", color = azulDeporte, fontSize = 26.sp, style = MaterialTheme.typography.titleLarge)
+            Text("Registro de Jugador", color = azulDeporte, fontSize = 30.sp, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(20.dp))
 
             OutlinedTextField(
@@ -156,7 +156,7 @@ fun RegistroScreen(
             Spacer(Modifier.height(10.dp))
 
             // Slider de nivel (1-7)
-            Text("Nivel de juego: $nivel", modifier = Modifier.align(Alignment.Start), color = verdePadel)
+            Text("Nivel de juego: $nivel", modifier = Modifier.align(Alignment.Start), color = verdePadel, fontWeight = FontWeight.Bold)
             Slider(
                 value = nivel.toFloat(),
                 onValueChange = { nivel = it.toInt() },

@@ -18,7 +18,7 @@ class AuthViewModel : ViewModel() {
 
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance().collection("usuarios")
-    private val TAG = "LoginViewModel"
+    private val TAG = "AuthViewModel"
 
     val isLoading = MutableStateFlow(false)
     val loginSuccess = MutableStateFlow(false)
@@ -58,7 +58,6 @@ class AuthViewModel : ViewModel() {
                                     "admin" -> navController.navigate(Rutas.ADMIN) {
                                         popUpTo(Rutas.LOGIN) { inclusive = true }
                                     }
-
                                     else -> navController.navigate(Rutas.DASHBOARD) {
                                         popUpTo(Rutas.LOGIN) { inclusive = true }
                                     }
@@ -76,7 +75,18 @@ class AuthViewModel : ViewModel() {
                     }
                 }
             } else {
-                errorMessage.value = task.exception?.message ?: "Error desconocido"
+                val exception = task.exception
+                when {
+                    exception is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException -> {
+                        errorMessage.value = "Las credenciales son inválidas."
+                    }
+                    exception is com.google.firebase.auth.FirebaseAuthInvalidUserException -> {
+                        errorMessage.value = "El usuario no existe."
+                    }
+                    else -> {
+                        errorMessage.value = "Error desconocido."
+                    }
+                }
             }
         }
     }
@@ -117,9 +127,9 @@ class AuthViewModel : ViewModel() {
                             )
 
                             firestore.document(usuarioId).set(nuevoUsuario).addOnSuccessListener {
-                                    userNotActivated.value = true
-                                    navController.navigate(Rutas.REGISTRO)
-                                }
+                                userNotActivated.value = true
+                                navController.navigate(Rutas.REGISTRO)
+                            }
                         } else {
                             val usuario = document.toObject(Usuario::class.java)
                             if (usuario?.activo == true) {
@@ -132,7 +142,6 @@ class AuthViewModel : ViewModel() {
                                     "admin" -> navController.navigate(Rutas.ADMIN) {
                                         popUpTo(Rutas.LOGIN) { inclusive = true }
                                     }
-
                                     else -> navController.navigate(Rutas.DASHBOARD) {
                                         popUpTo(Rutas.LOGIN) { inclusive = true }
                                     }
@@ -170,7 +179,6 @@ class AuthViewModel : ViewModel() {
         errorMessage.value = null
         loginSuccess.value = false
 
-        // Validar si el nombreUsuario ya existe
         firestore.whereEqualTo("nombreUsuario", nombreUsuario).get()
             .addOnSuccessListener { documents ->
                 if (!documents.isEmpty) {
@@ -204,8 +212,7 @@ class AuthViewModel : ViewModel() {
                                             popUpTo(0) { inclusive = true }
                                         }
                                     }.addOnFailureListener {
-                                        errorMessage.value =
-                                            "Error al guardar usuario: ${it.message}"
+                                        errorMessage.value = "Error al guardar usuario: ${it.message}"
                                     }
                                 }
                             } else {
@@ -219,35 +226,14 @@ class AuthViewModel : ViewModel() {
             }
     }
 
-
     fun signOut(
         context: Context, navController: NavController, usuarioViewModel: UsuarioViewModel
     ) {
-        if (loginGoogleSuccess.value) {
-            val googleSignInClient = GoogleSignIn.getClient(
-                context,
-                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(context.getString(R.string.google_app_id)).requestEmail()
-                    .build()
-            )
-            googleSignInClient.revokeAccess().addOnCompleteListener {
-                auth.signOut()
-                usuarioViewModel.cerrarSesion()
-                navController.navigate(Rutas.LOGIN) {
-                    popUpTo(Rutas.LOGIN) { inclusive = true }
-                }
-            }
-        } else {
-            auth.signOut()
-            usuarioViewModel.cerrarSesion()
-            navController.navigate(Rutas.LOGIN) {
-                popUpTo(0) { inclusive = true }
-            }
+        auth.signOut()
+        usuarioViewModel.cerrarSesion()
+        navController.navigate(Rutas.LOGIN) {
+            popUpTo(Rutas.LOGIN) { inclusive = true }
         }
-
-        loginSuccess.value = false
-        userNotActivated.value = false
-        errorMessage.value = null
     }
 
     fun getCurrentUserId(): String? = auth.currentUser?.uid

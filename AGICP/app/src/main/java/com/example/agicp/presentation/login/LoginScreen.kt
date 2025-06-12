@@ -4,6 +4,7 @@ import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -40,8 +42,10 @@ fun LoginScreen(
     usuarioViewModel: UsuarioViewModel
 ) {
     val context = LocalContext.current
+    val fondoLogin = painterResource(id = R.drawable.fondo_login) // Asegúrate de poner la imagen en drawable
+    // Colores AGICP
     val verdePadel = colorResource(id = R.color.verde_padel)
-    val azulDeporte = colorResource(id = R.color.azul_deporte)
+    val azulDeporte = Color(0xFF003366)
     val grisClaro = colorResource(id = R.color.gris_claro)
     val naranjaVivo = colorResource(id = R.color.naranja_vivo)
 
@@ -116,14 +120,20 @@ fun LoginScreen(
     Box(
         Modifier
             .fillMaxSize()
-            .background(grisClaro),
+            .background(azulDeporte), // Fondo azul oscuro
         contentAlignment = Alignment.Center
     ) {
+        Image(
+            painter = fondoLogin,
+            contentDescription = "Fondo de login",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
         Column(
             Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 12.dp)
-                .background(Color.White, RoundedCornerShape(24.dp))
+                .background(color = naranjaVivo, RoundedCornerShape(24.dp))
                 .padding(28.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -138,9 +148,12 @@ fun LoginScreen(
             Spacer(Modifier.height(16.dp))
             Text(
                 "Bienvenido a AGICP",
-                color = azulDeporte,
-                fontSize = 28.sp,
-                style = MaterialTheme.typography.titleLarge
+                color = Color.White, // Texto blanco
+                fontSize = 30.sp,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 16.dp),
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+
             )
             Spacer(Modifier.height(32.dp))
 
@@ -162,7 +175,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Contraseña") },
+                label = { Text("Contraseña", color = azulDeporte) },
                 leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 visualTransformation = PasswordVisualTransformation(),
@@ -194,24 +207,24 @@ fun LoginScreen(
 
             Spacer(Modifier.height(12.dp))
 
-            // Botón login Google
-            OutlinedButton(
+            // Botón login Google - redondo con logo
+            Button(
                 onClick = { launchGoogleSignIn() },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp),
-                shape = RoundedCornerShape(18.dp),
-                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
+                    .height(48.dp)
+                    .padding(8.dp),  // Añadimos un poco de padding
+                shape = RoundedCornerShape(50), // Botón redondeado
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
-                Icon(
+                Image(
                     painter = painterResource(id = R.drawable.logo_google),
                     contentDescription = "Google Sign-In",
                     modifier = Modifier.size(24.dp)
                 )
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.width(8.dp))  // Espacio entre el logo y el texto
                 Text("Continuar con Google", color = Color.Black, fontSize = 18.sp)
             }
-
             Spacer(Modifier.height(20.dp))
 
             // Error
